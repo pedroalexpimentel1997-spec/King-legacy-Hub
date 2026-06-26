@@ -1,5 +1,6 @@
 -- [[ KING LEGACY ULTRA HUB - DELTA EXECUTOR EDITION ]] --
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/GGBV9/GGHUB/main/GG"))()
+
 
 local Window = Rayfield:CreateWindow({
    Name = "👑 King Legacy: Ultra Hub (Delta) 👑",
