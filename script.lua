@@ -1,6 +1,5 @@
 -- [[ KING LEGACY ULTRA HUB - DELTA EXECUTOR EDITION ]] --
-local Rayfield = loadstring(game:HttpGet("https://githubusercontent.com/GGBV9/GGHUB/main/GG"))()
-
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/GGBV9/GGHUB/main/GG"))()
 
 local Window = Rayfield:CreateWindow({
    Name = "👑 King Legacy: Ultra Hub (Delta) 👑",
@@ -34,16 +33,13 @@ LocalPlayer.Idled:Connect(function()
 end)
 
 -- 🛡️ PROTETOR DE QUEDA E ESTABILIDADE (Bypass de Velocidade Nátivo do Delta)
--- Mantém a velocidade da rede estável para o servidor não te desconectar por lag ou velocidade de queda
 RunService.Heartbeat:Connect(function()
     pcall(function()
         if getgenv().AutoFarm or getgenv().AutoSea then
             local char = LocalPlayer.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
-                -- Define a velocidade linear para zero para anular a gravidade sem quebrar o Anti-Cheat
                 char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                 
-                -- Desativa colisão localmente apenas quando ativo (Evita lag de física no Delta)
                 for _, part in pairs(char:GetChildren()) do
                     if part:IsA("BasePart") then
                         part.CanCollide = false
@@ -54,14 +50,12 @@ RunService.Heartbeat:Connect(function()
     end)
 end)
 
--- 🛡️ TWEEN SUAVE ADAPTADO PARA MOBILE (Sem engasgos na tela)
+-- 🛡️ TWEEN SUAVE ADAPTADO PARA MOBILE
 local function DeltaSecureMove(targetCFrame, speed)
     local char = LocalPlayer.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         local hrp = char.HumanoidRootPart
         local distance = (hrp.Position - targetCFrame.Position).Magnitude
-        
-        -- Velocidade de 230 é o limite seguro do Delta para não gerar borrão de tela/renderização lenta
         local duration = distance / (speed or 230) 
         
         local tween = TweenService:Create(hrp, TweenInfo.new(duration, Enum.EasingStyle.Linear), {CFrame = targetCFrame})
@@ -73,10 +67,9 @@ end
 -- 🛡️ BYPASS DE CLICK / ATAQUE COM DELAY HUMANO
 local lastAttack = 0
 local function BypassAttack()
-    if os.clock() - lastAttack >= 0.15 then -- Delay levemente maior para melhor registro em celulares
+    if os.clock() - lastAttack >= 0.15 then
         local char = LocalPlayer.Character
         if char then
-            -- Procura e equipa automaticamente se houver alguma ferramenta na mochila
             local tool = char:FindFirstChildOfClass("Tool") or LocalPlayer.Backpack:FindFirstChildOfClass("Tool")
             if tool then
                 if tool.Parent == LocalPlayer.Backpack then
@@ -120,7 +113,6 @@ TabFarm:CreateToggle({
                            if (monster.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < 600 then
                                repeat
                                    task.wait()
-                                   -- Fica posicionado em cima do monstro com margem de segurança para evitar detecção visual de outros players
                                    LocalPlayer.Character.HumanoidRootPart.CFrame = monster.HumanoidRootPart.CFrame * CFrame.new(0, 9, 0)
                                    BypassAttack()
                                until not getgenv().AutoFarm or not monster:FindFirstChild("Humanoid") or monster.Humanoid.Health <= 0
@@ -171,7 +163,7 @@ TabTP:CreateDropdown({
    end,
 })
 
--- [[ LÓGICA: VISUAIS / ESP COMPATÍVEL COM CELULAR ]] --
+-- [[ LÓGICA: VISUAIS / ESP ]] --
 local function CreateDeltaESP(object, text, color)
     if object:FindFirstChild("DeltaESP") then return end
     local bbg = Instance.new("BillboardGui", object)
@@ -184,7 +176,7 @@ local function CreateDeltaESP(object, text, color)
     lbl.Size = UDim2.new(1, 0, 1, 0)
     lbl.BackgroundTransparency = 1
     lbl.TextColor3 = color
-    lbl.TextSize = 12 -- Fonte ligeiramente menor para telas mobile
+    lbl.TextSize = 12
     lbl.Text = text
 end
 
@@ -200,7 +192,7 @@ TabVisual:CreateToggle({
        else
            task.spawn(function()
                while getgenv().EspFrutas do
-                   task.wait(3) -- Delay maior de varredura para não dar queda de FPS no celular
+                   task.wait(3)
                    for _, v in pairs(workspace:GetChildren()) do
                        if v:IsA("Tool") and v.Name:find("Fruit") and v:FindFirstChild("Handle") then
                            CreateDeltaESP(v.Handle, v.Name, Color3.fromRGB(0, 255, 100))
